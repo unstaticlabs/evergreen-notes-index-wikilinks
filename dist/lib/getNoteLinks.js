@@ -6,7 +6,7 @@ export default async function getNoteLinks(note) {
     const links = [];
     const wikilinks = content.matchAll(WIKILINKSregex);
     for (const wikilink of wikilinks)
-        links.push(wikilink[1]);
+        links.push(wikilink[1].toLowerCase());
     return links;
 }
 //# sourceMappingURL=getNoteLinks.js.map

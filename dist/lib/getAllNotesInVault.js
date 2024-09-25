@@ -13,7 +13,7 @@ const readNotesPaths = async (noteFolderPath) => {
         && !entry.name.startsWith(".")
         && entry.name.endsWith(EXTENSION))
         .map(entry => ({
-        title: removeMdExtension(entry.name),
+        title: removeMdExtension(entry.name).toLowerCase(),
         path: path.join(noteFolderPath, entry.name),
         referenced_by: [],
     }));
@@ -24,7 +24,7 @@ const readNotesPaths = async (noteFolderPath) => {
     nestedNotesPaths.push(firstLevelNotes);
     return nestedNotesPaths.flat();
 };
-const duplicateId = (note, vaultDir) => removeMdExtension(note.path).substring(vaultDir.length + 1);
+const duplicateId = (note, vaultDir) => removeMdExtension(note.path).substring(vaultDir.length + 1).toLowerCase();
 const buildNotesIndexFromArray = (notes, vaultDir) => {
     const index = {};
     for (const note of notes) {
@@ -35,7 +35,6 @@ const buildNotesIndexFromArray = (notes, vaultDir) => {
             const noteId = duplicateId(note, vaultDir);
             index[noteId] = note;
             if (Array.isArray(index[note.title])) {
-                // TODO: if unnecessary , remove?
                 index[note.title].push(noteId);
             }
             else {

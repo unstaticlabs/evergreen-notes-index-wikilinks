@@ -19,7 +19,7 @@ const readNotesPaths = async (noteFolderPath: string): Promise<Note[]> => {
       && !entry.name.startsWith(".")
       && entry.name.endsWith(EXTENSION))
     .map(entry => ({
-      title: removeMdExtension(entry.name),
+      title: removeMdExtension(entry.name).toLowerCase(),
       path: path.join(noteFolderPath, entry.name),
       referenced_by: [],
     }))
@@ -34,7 +34,7 @@ const readNotesPaths = async (noteFolderPath: string): Promise<Note[]> => {
 }
 
 const duplicateId = (note: Note, vaultDir: string): string =>
-  removeMdExtension(note.path).substring(vaultDir.length + 1)
+  removeMdExtension(note.path).substring(vaultDir.length + 1).toLowerCase()
 
 const buildNotesIndexFromArray = (notes: Note[], vaultDir: string): NotesIndex => {
   const index: NotesIndex = {}
@@ -45,7 +45,6 @@ const buildNotesIndexFromArray = (notes: Note[], vaultDir: string): NotesIndex =
       const noteId = duplicateId(note, vaultDir)
       index[noteId] = note
       if (Array.isArray(index[note.title])) {
-        // TODO: if unnecessary , remove?
         (index[note.title] as string[]).push(noteId)
       } else {
         const duplicateNote: Note = index[note.title] as Note
